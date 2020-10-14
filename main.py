@@ -9,12 +9,13 @@ from vk_api.longpoll import VkLongPoll, VkEventType
 Lslongpoll = VkLongPoll(vk_session)
 Lsvk = vk_session.get_api()
 
-command_name = 'Оксения'
+command_name = 'Оксения' #имя на которое бот будет триггериться 
 
+#Является ли данное сообщение командой?
 def Is_Command(message_):
 	return command_name in str(message_)
 
-
+#В параметрах 1) Текст сообещния, 2) Ссылка на прикреплённый объект
 def Send_Message(message_, link_attachment = ''):
 	vk.messages.send(
                     key = ('497dddd12ab57e45b2078e39124c70ec3a546118'),
@@ -29,15 +30,19 @@ def Send_Message(message_, link_attachment = ''):
 
 for event in longpoll.listen():
     if event.type == VkBotEventType.MESSAGE_NEW:
+
         if Is_Command(event) and ('Ку' in str(event) or 'Привет' in str(event) or 'Хай' in str(event) or 'Хелло' in str(event) or 'Хеллоу' in str(event)):
             if event.from_chat:
                 Send_Message('Привет!')
+
         elif 'Ксюша' in str(event):
         	if event.from_chat:
         		Send_Message('Какая нахуй Ксюша?? Она блять Оксана!!!!')
+
        	elif Is_Command(event) and ('дз' and 'скинули' in str(event)):
        		if event.from_chat:
        			Send_Message('','photo94890674_457245477')
+       			
        	elif Is_Command(event) and ('нюхай' and 'бебру' in str(event)):
        		if event.from_chat:
        			Send_Message('Ты охуел? Сам нюхай!!', 'video258466863_456239268')
