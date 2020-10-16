@@ -1,3 +1,4 @@
+import pickle
 from commands import commands
 from Deadline.homework import HomeWork
 
@@ -5,7 +6,7 @@ class Deadlines:
 	deadlines = dict() #Словарь всех дедлайнов
 
 	def __init__(self):
-		pass
+		self.Load_From_File()
 
 	def Add_Deadline(self, message_:str, conversation_id):
 		print(conversation_id)
@@ -19,14 +20,15 @@ class Deadlines:
 		try:
 			if words[1] in self.deadlines[conversation_id]:
 				self.deadlines[conversation_id][words[1]].append(HomeWork(words[2], words[3]))
+
 			else:
 				self.deadlines[conversation_id][words[1]] = [HomeWork(words[2], words[3])]
+			self.Save_In_File()
 			response = {'message': commands['add_deadline']['message'][0],'attachment': commands['add_deadline']['attachment']}
 			return response
 		except BaseException:
 			response = {'message': commands['add_deadline']['message'][1],'attachment': commands['add_deadline']['attachment']}
 			return response
-
 	def Get_Deadline(self, message_:str, conversation_id):
 		words=message_.split(' : ')
 		print(conversation_id)
@@ -86,3 +88,15 @@ class Deadlines:
 			if homework.get_subject() == subj:
 				return homework
 		return None
+
+	
+	def Save_In_File(self):
+		with open('deadlines.bin','wb') as out:
+			pickle.dump(self.deadlines,out)
+
+	def Load_From_File(self):
+		try:
+			with open('deadlines.bin','rb') as inp:
+				self.deadlines = pickle.load(inp)
+		except:
+			deadlines = {}

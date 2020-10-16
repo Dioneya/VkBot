@@ -3,6 +3,7 @@ from setting import main_token, group_id, message_key, server_, ts_, command_nam
 from bot import BotCommand
 from Help.help import Help
 from Deadline.deadlines import Deadlines
+from Algoritm_Ksusha.laugh import Laugh_Ksusha
 from vk_api.utils import get_random_id
 vk_session = vk_api.VkApi(token = main_token)
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
@@ -15,6 +16,7 @@ Lsvk = vk_session.get_api()
 bot = BotCommand()
 deadline = Deadlines()
 help_ = Help()
+laugh = Laugh_Ksusha()
 
 #Является ли данное сообщение командой?
 def Is_Command(message_):
@@ -115,6 +117,13 @@ for event in longpoll.listen():
     	elif 'мы суки' in message:
     		if event.from_chat:
     			Send_Message(bot.We_are_Bitches())
+
+    	elif laugh.Check(message):
+    		if event.from_chat:
+    			laugh_ = laugh.generate()
+    			if laugh_ != None:
+    				response = {'message' : laugh_, 'attachment' : ''}
+    				Send_Message(response)
        	
        			
        	
